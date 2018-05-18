@@ -16,8 +16,8 @@ class TimerComponent extends React.Component {
   calcTimer(){
     let currentTime = Date.now();
     let hours = Math.floor( (currentTime - this.props.startingTimer)/3600000 );
-    let minutes = Math.floor( (currentTime - this.props.startingTimer)/60000 );
-    let seconds = Math.floor( (currentTime - this.props.startingTimer)/1000 );;
+    let minutes = Math.floor( ((currentTime - this.props.startingTimer)/60000) % 60 );
+    let seconds = Math.floor( ((currentTime - this.props.startingTimer)/1000) % 60 );;
   	this.setState({
       hours: hours,
       minutes: minutes,

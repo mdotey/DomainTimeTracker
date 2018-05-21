@@ -4,10 +4,13 @@ import React from "react";
 import { render } from "react-dom";
 const console = chrome.extension.getBackgroundPage().console;
 
-chrome.runtime.sendMessage({request: "getStartTime"}, function(response) {
-    const startingTime = response.startTime;
+//Get starting time for current domain and render it
+chrome.runtime.sendMessage({request: "getTotalTime"}, function(response) {
+    const totalTime = response.totalTime;
+    const url = response.domain;
+    console.log(totalTime + " date.now" + Date.now());
     render(
-      <Timer startingTimer = {startingTime}/>,
+      <Timer totalTime = {totalTime} domain = {url}/>,
       window.document.getElementById("app-container")
     );
 });

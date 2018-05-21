@@ -7,7 +7,9 @@ class TimerComponent extends React.Component {
     this.state = {
       hours: 0, 
       minutes: 0, 
-      seconds:0
+      seconds:0,
+      domain: this.props.domain,
+      startTime: Date.now()
     };
   	this.calcTimer = this.calcTimer.bind(this);
   }
@@ -15,9 +17,9 @@ class TimerComponent extends React.Component {
   /*Calculate how long the browser has been active*/
   calcTimer(){
     let currentTime = Date.now();
-    let hours = Math.floor( (currentTime - this.props.startingTimer)/3600000 );
-    let minutes = Math.floor( ((currentTime - this.props.startingTimer)/60000) % 60 );
-    let seconds = Math.floor( ((currentTime - this.props.startingTimer)/1000) % 60 );;
+    let hours = Math.floor( (currentTime - this.state.startTime + this.props.totalTime)/3600000 );
+    let minutes = Math.floor( ((currentTime - this.state.startTime + this.props.totalTime)/60000) % 60 );
+    let seconds = Math.floor( ((currentTime - this.state.startTime + this.props.totalTime)/1000) % 60 );;
   	this.setState({
       hours: hours,
       minutes: minutes,
@@ -25,18 +27,19 @@ class TimerComponent extends React.Component {
     });
   }
 
+  /*Calculate the timer every second when the popup is open*/
   componentDidMount() {
-  	this.interval = setInterval(() => this.calcTimer(), 500);
+  	this.interval = setInterval(() => this.calcTimer(), 1000);
   }
 
-  componentwillUnmount(){
+  componentWillUnmount(){
   	clearInterval(this.interval);
   }
 
   render () {
     return (
       <div>
-        <p>This page has been active for {this.state.hours} hours {this.state.minutes} minutes {this.state.seconds} seconds.</p>
+        <p>This page has been on {this.state.domain} for {this.state.hours} hours {this.state.minutes} minutes {this.state.seconds} seconds.</p>
       </div>
     )
   }

@@ -12,7 +12,7 @@ chrome.tabs.query({'active' : true, 'currentWindow': true}, function(tabs){
 	currentTimer = Date.now();	
 });
 
-//Detect when goign to a new domain and change timers accordingly
+//Detect when going to a new domain and change timers accordingly
 chrome.tabs.onUpdated.addListener(function(tabid, changeInfo, tab){
 	chrome.tabs.query({'active' : true, 'currentWindow': true}, function(tabs){
 		let url = new URL(tabs[0].url);

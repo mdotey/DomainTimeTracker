@@ -38,9 +38,9 @@ class TimerComponent extends React.Component {
 
   render () {
     return (
-      <div>
-        <p>This page has been on {this.state.domain} for {this.state.hours} hours {this.state.minutes} minutes {this.state.seconds} seconds.</p>
-      </div>
+        <div>
+          <p>This page has been on {this.state.domain} for {this.state.hours} hours {this.state.minutes} minutes {this.state.seconds} seconds.</p>
+        </div>
     )
   }
 };

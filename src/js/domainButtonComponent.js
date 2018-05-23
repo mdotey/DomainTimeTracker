@@ -33,7 +33,6 @@ class domainButtonComponent extends React.Component {
 	render() {
 		return(
 			<div>
-				<h1>test2</h1>
 				<button id="domainButton" onClick={this.handleDomainClick}>Show Domain List</button>
 			</div>
 		)

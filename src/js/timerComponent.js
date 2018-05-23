@@ -19,7 +19,7 @@ class TimerComponent extends React.Component {
     let currentTime = Date.now();
     let hours = Math.floor( (currentTime - this.state.startTime + this.props.totalTime)/3600000 );
     let minutes = Math.floor( ((currentTime - this.state.startTime + this.props.totalTime)/60000) % 60 );
-    let seconds = Math.floor( ((currentTime - this.state.startTime + this.props.totalTime)/1000) % 60 );;
+    let seconds = Math.floor( ((currentTime - this.state.startTime + this.props.totalTime)/1000) % 60 );
   	this.setState({
       hours: hours,
       minutes: minutes,

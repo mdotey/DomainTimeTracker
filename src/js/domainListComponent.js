@@ -6,6 +6,8 @@ var console = chrome.extension.getBackgroundPage().console;
 class DomainListComponent extends React.Component {
 	constructor(props){
 		super(props);
+		this.state = {deleted: []};
+		this.handleRemoveClick = this.handleRemoveClick.bind(this);
 	}
 
 	calcTimer(milliseconds){
@@ -16,14 +18,37 @@ class DomainListComponent extends React.Component {
 	    return (<div>{hours} hours {minutes} minutes {seconds} seconds</div>)
 	  }
 
+	handleRemoveClick(domain) {
+		chrome.runtime.sendMessage({request: "removeDomain", domain: domain}, function(response){
+			console.log(response.status);	
+		});
+		this.setState({deleted: [...this.state.deleted, domain]});
+	}
+
 	render(){
-    	const domainDictionary = this.props.domains;  // Essentially does: const vals = this.state.vals;
+    	const domains = this.props.domains; 
+    	console.log("rendering");
   		return (
     		<div>
       			{
-   					 Object.entries(domainDictionary)
-    					.map( ([key, value]) => <h2 key={key}>{key}{this.calcTimer(value)}</h2> )
-  				}
+   					Object.entries(domains)
+    				.map( ([key, value]) => {
+    					return (
+	    					<div>
+	    						{	
+	    							//Check if domain has been deleted
+	    							 (this.state.deleted.includes(key) == false) &&
+	    								<div> 							
+	    								<h2 key={key}>{key}{this.calcTimer(value)}</h2> 
+	    								<button id={key} onClick={this.handleRemoveClick.bind(this, key)}>Remove {key}</button>
+	  									</div>
+	  								
+	  							}	
+	  							
+	  						</div>
+  						)
+  					})
+  				}		
     		</div>
   		)
   	}
@@ -32,9 +57,13 @@ class DomainListComponent extends React.Component {
 
 
 chrome.runtime.sendMessage({request: "getDomainList"}, function(response) {
-	const domainDict = response.domainList;
+	const domainList = response.domainList;
 	render(
-	    <DomainListComponent domains = {domainDict} />,
+		(
+			<div>
+	    		<DomainListComponent domains = {domainList} />
+	    	</div>
+	    ),
 	    window.document.getElementById("domain-container")
 	);
 });

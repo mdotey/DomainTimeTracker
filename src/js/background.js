@@ -56,8 +56,9 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 	});
 });
 
-//Send the total time for website request
+//Listen for various messages
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+	//Send the total time of a domain
     if (message.request === "getTotalTime") {
     		let totalTime;
     		if (currentDomain in domainTimeDict) {
@@ -74,29 +75,14 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 			});        
     }
 
+    //Send the domain dictionary
     if (message.request === "getDomainList") {
     	sendResponse({domainList: domainTimeDict});
     }
-});
 
-
-
-
-
-
-
-
-/*//test dict iteration
-let dict = {};
-dict.key1 = "val1";
-dict.key2 = "val2";
-dict.key3 = "val3";
-dict.key4 = "val4";
-
-for (const [ key, value ] of Object.entries(dict)) {
-    // do something with `key` and `value`
-    console.log(value + "value" + key + "key");
-    if (!("key7" in dict)) {
-    	console.log( dict.key3 + "we did it");
+    //Remove a domain from the dictionary
+    if (message.request === "removeDomain") {
+    	delete domainTimeDict[message.domain];
+    	sendResponse({status: "complete"});
     }
-}*/
+});

@@ -17,22 +17,3 @@ chrome.runtime.sendMessage({request: "getTotalTime"}, function(response) {
       window.document.getElementById("popup-container")
     );
 });
-
-/*
-//open domains page
-function openDomainsPage() {
-	chrome.tabs.create({url: chrome.runtime.getURL("domainlist.html")});
-
-}
-*/
-//chrome.runtime.sendMessage({request: "getAllDomains"}, function(response) {
-
-    /*render(
-      <DomainListComponent totalTime = {totalTime} domain = {url}/>,
-      window.document.getElementById("app-container")
-    );*/
-//});
-
-//Event listener for "See all domains" button
-//const seeAllDomains = window.document.getElementById("seeAllButton");
-//seeAllDomains.addEventListener("click", openDomainsPage, false);

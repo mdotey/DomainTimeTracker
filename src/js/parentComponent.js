@@ -15,7 +15,7 @@ class ParentComponent extends React.Component {
 				<div id="TimerComponent">
 					<Timer 
 						totalTime = {this.props.totalTime} 
-						domain = {this.props.url}
+						domain = {this.props.domain}
 					/>
 				</div>
 				<div id="buttons">

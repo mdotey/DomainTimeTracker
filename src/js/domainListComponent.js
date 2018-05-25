@@ -1,6 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import { hot } from "react-hot-loader";
+import "../css/popup.css";
 
 var console = chrome.extension.getBackgroundPage().console;
 class DomainListComponent extends React.Component {
@@ -17,10 +18,26 @@ class DomainListComponent extends React.Component {
 	    let seconds = Math.floor( (milliseconds/1000) % 60 );
 	  	
 	  	if (this.props.isShortTime){
-	  		return (<div>{hours}H{minutes}M{seconds}S</div>)
+	  		return ( 
+	  			<div>
+		            <div className="digit">{hours}</div>
+		            <div className="word">H</div>
+		            <div className="digit">{minutes}</div>
+		            <div className="word">M</div> 
+		            <div className="digit">{seconds}</div> 
+		            <div className="word">S</div>
+          		</div>)
 	  	} 
 	  	else {
-	    	return (<div>{hours} hours {minutes} minutes {seconds} seconds</div>)
+	    	return (
+	    		 <div>
+		            <div className="digit">{hours}</div>
+		            <div className="word">hours</div>
+		            <div className="digit">{minutes}</div>
+		            <div className="word">minutes</div> 
+		            <div className="digit">{seconds}</div> 
+            		<div className="word">seconds</div>
+          		</div>)
 	  	}
 	  }
 
@@ -39,11 +56,12 @@ class DomainListComponent extends React.Component {
       			{
    					Object.entries(domains).map( ([key, value]) => {
     					return (
-	    					<div>
+	    					<div className="list-group">
 	    					{	//Check if domain has been deleted
 	    						(this.state.deleted.includes(key) == false) &&
 	    						<div> 							
-	    							<h2 key={key}>{key}{this.calcTimer(value)}</h2> 
+	    							<div key={key} className="list-header">{key}</div> 
+	    							{this.calcTimer(value)}
 	    							<button id={key} onClick={this.handleRemoveClick.bind(this, key)}>Remove {key}</button>
 	  							</div>	  								
 	  						}	  							

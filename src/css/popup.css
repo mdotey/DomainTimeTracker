@@ -1,4 +1,42 @@
-body {
-  width: 275px;
+.popup-body {
+  width: 325px;
   margin: 0px;
+}
+
+.digit {
+  color: #0000FF;
+  display: inline-block;
+  font-weight: 'bold';
+  font-size: 32px;
+}
+
+.word {
+  display: inline-block;
+  font-weight: 'bold';
+  font-size: 22px;
+}
+
+.popup-header{
+	font-size: 24px;
+	font-weight: 730;
+}
+
+.list-body{
+	width: 100%;
+}
+
+.list-header{
+	font-size: 24px;
+	font-weight: 730;
+}
+
+.list-group{
+	border-style: outset;
+	border-width: 2px;
+	display: inline-block;
+	margin: 10px;
+}
+
+.change-time{
+	font-size: 16px;
 }

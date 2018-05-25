@@ -22,7 +22,11 @@ var options = {
   entry: {
     popup: path.join(__dirname, "src", "js", "popup.js"),
     options: path.join(__dirname, "src", "js", "options.js"),
-    background: path.join(__dirname, "src", "js", "background.js")
+    background: path.join(__dirname, "src", "js", "background.js"),
+    parentComponent: path.join(__dirname, "src", "js", "parentComponent.js"),
+    timerComponent: path.join(__dirname, "src", "js", "timerComponent.js"),
+    domainListComponent: path.join(__dirname, "src", "js", "domainListComponent.js"),
+    settingsComponent: path.join(__dirname, "src", "js", "settingsComponent.js")
   },
   output: {
     path: path.join(__dirname, "build"),
@@ -88,6 +92,11 @@ var options = {
       template: path.join(__dirname, "src", "background.html"),
       filename: "background.html",
       chunks: ["background"]
+    }),
+     new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src", "domainlist.html"),
+      filename: "domainList.html",
+      chunks: ["domainlist"]
     }),
     new WriteFilePlugin()
   ]

@@ -1,6 +1,9 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
+
+var console = chrome.extension.getBackgroundPage().console;
+
 class TimerComponent extends React.Component {
   constructor(props){
   	super(props);
@@ -8,10 +11,10 @@ class TimerComponent extends React.Component {
       hours: 0, 
       minutes: 0, 
       seconds:0,
-      domain: this.props.domain,
       startTime: Date.now()
     };
   	this.calcTimer = this.calcTimer.bind(this);
+    this.renderHelper = this.renderHelper.bind(this);
   }
 
   /*Calculate how long the browser has been active*/
@@ -27,6 +30,37 @@ class TimerComponent extends React.Component {
     });
   }
 
+  renderHelper() {
+    console.log("got here" + this.props.isShortTime);
+
+    if (this.props.isShortTime) {
+      return(
+        <div>
+            <div className="digit">{this.state.hours}</div>
+            <div className="word">H</div>
+            <div className="digit">{this.state.minutes}</div>
+            <div className="word">M</div> 
+            <div className="digit">{this.state.seconds}</div> 
+            <div className="word">S</div>
+          </div>
+      )
+    }
+    else {
+      return(
+        <div>
+          <div className="digit">{this.state.hours}</div>
+          <div className="word">hours</div>
+          <div className="digit">{this.state.minutes}</div>
+          <div className="word">minutes</div> 
+          <div className="digit">{this.state.seconds}</div> 
+          <div className="word">seconds</div>
+        </div>
+      )
+    }
+  }
+
+
+
   /*Calculate the timer every second when the popup is open*/
   componentDidMount() {
   	this.interval = setInterval(() => this.calcTimer(), 1000);
@@ -39,8 +73,8 @@ class TimerComponent extends React.Component {
   render () {
     return (
         <div>
-          <h3>{this.state.domain}</h3>
-          <h3>{this.state.hours} hours {this.state.minutes} minutes {this.state.seconds} seconds.</h3>
+          <div className="popup-header">{this.props.domain}</div>  
+          {this.renderHelper()}
         </div>
     )
   }

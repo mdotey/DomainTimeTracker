@@ -8,6 +8,7 @@ class DomainListComponent extends React.Component {
 		super(props);
 		this.state = {deleted: []};
 		this.handleRemoveClick = this.handleRemoveClick.bind(this);
+		this.calcTimer = this.calcTimer.bind(this);
 	}
 
 	calcTimer(milliseconds){
@@ -15,7 +16,12 @@ class DomainListComponent extends React.Component {
 	    let minutes = Math.floor( (milliseconds/60000) % 60 );
 	    let seconds = Math.floor( (milliseconds/1000) % 60 );
 	  	
-	    return (<div>{hours} hours {minutes} minutes {seconds} seconds</div>)
+	  	if (this.props.isShortTime){
+	  		return (<div>{hours}H{minutes}M{seconds}S</div>)
+	  	} 
+	  	else {
+	    	return (<div>{hours} hours {minutes} minutes {seconds} seconds</div>)
+	  	}
 	  }
 
 	handleRemoveClick(domain) {
@@ -31,23 +37,19 @@ class DomainListComponent extends React.Component {
   		return (
     		<div>
       			{
-   					Object.entries(domains)
-    				.map( ([key, value]) => {
+   					Object.entries(domains).map( ([key, value]) => {
     					return (
 	    					<div>
-	    						{	
-	    							//Check if domain has been deleted
-	    							 (this.state.deleted.includes(key) == false) &&
-	    								<div> 							
-	    								<h2 key={key}>{key}{this.calcTimer(value)}</h2> 
-	    								<button id={key} onClick={this.handleRemoveClick.bind(this, key)}>Remove {key}</button>
-	  									</div>
-	  								
-	  							}	
-	  							
+	    					{	//Check if domain has been deleted
+	    						(this.state.deleted.includes(key) == false) &&
+	    						<div> 							
+	    							<h2 key={key}>{key}{this.calcTimer(value)}</h2> 
+	    							<button id={key} onClick={this.handleRemoveClick.bind(this, key)}>Remove {key}</button>
+	  							</div>	  								
+	  						}	  							
 	  						</div>
-  						)
-  					})
+  					)})
+  						
   				}		
     		</div>
   		)
@@ -58,12 +60,9 @@ class DomainListComponent extends React.Component {
 
 chrome.runtime.sendMessage({request: "getDomainList"}, function(response) {
 	const domainList = response.domainList;
+	const isShortTime = response.shortTime;
 	render(
-		(
-			<div>
-	    		<DomainListComponent domains = {domainList} />
-	    	</div>
-	    ),
+		<DomainListComponent domains = {domainList} isShortTime = {isShortTime} />,
 	    window.document.getElementById("domain-container")
 	);
 });

@@ -10,11 +10,13 @@ chrome.runtime.sendMessage({request: "getTotalTime"}, function(response) {
     const totalTime = response.totalTime;
     const url = response.domain;
     const shortTime = response.shortTime;
+    const status = response.status;
     render(
       <Parent 
       	totalTime = {totalTime} 
       	domain = {url}
-      	isShortTime = {shortTime}/>,
+      	isShortTime = {shortTime}
+      	status = {status}/>,
       window.document.getElementById("popup-container")
     );
 });

@@ -31,8 +31,6 @@ class TimerComponent extends React.Component {
   }
 
   renderHelper() {
-    console.log("got here" + this.props.isShortTime);
-
     if (this.props.isShortTime) {
       return(
         <div>

@@ -7,7 +7,7 @@ let domainTimeDict = {};
 let currentDomain;
 let currentTimer;
 let shortTime = true;
-let domainsBlocked = [];
+let blockedDomains = [];
 const url = require('url');
 
 //Set timer on startup
@@ -40,20 +40,23 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 
 
 /*
-POSSIBLE CHROME BUG THAT MAKES THIS EVENT NOT FIRE
+//Needs to be fixed, possibly due to known chrome bug
+
 //Detect when clicking on a different window and pause the timer
 chrome.windows.onFocusChanged.addListener(function(windowId){
-	if (windowId == chrome.windows.WINDOW_ID_NONE){		
+	if (windowId == chrome.windows.WINDOW_ID_NONE){	
 			//Check if old domain has been visited before
-			if (currentDomain in domainTimeDict) {
-				domainTimeDict[currentDomain] = Date.now() - currentTimer + domainTimeDict[currentDomain];
-			}
-			else {
-				domainTimeDict[currentDomain] = Date.now() - currentTimer;
-			}
-			//update current time and domain
-			currentTimer = null;
-			currentDomain = null;	
+			if (!blockedDomains.includes(currentDomain)){	
+				if (currentDomain in domainTimeDict) {
+					domainTimeDict[currentDomain] = Date.now() - currentTimer + domainTimeDict[currentDomain];
+				}
+				else {
+					domainTimeDict[currentDomain] = Date.now() - currentTimer;
+				}
+				//update current time and domain
+				//currentTimer = null;
+				//currentDomain = null;
+			}	
 	}
 	else{
 		chrome.tabs.query({'active' : true, 'currentWindow': true}, function(tabs){
@@ -62,16 +65,15 @@ chrome.windows.onFocusChanged.addListener(function(windowId){
 		});
 	}
 });
-*/
 
+*/
 
 //Listen for various messages
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	//Send the total time of a domain
-	console.log("domainsBlocked: " + domainsBlocked);
     if (message.request === "getTotalTime") {
     		
-    	if (domainsBlocked.includes(currentDomain)){
+    	if (blockedDomains.includes(currentDomain)){
     		sendResponse({
     			totalTime: -1,
 				domain: currentDomain,
@@ -109,15 +111,17 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
     //Block a domain from being recorded
     if (message.request === "blockDomain") {
-    	domainsBlocked.push(message.domain);
+    	blockedDomains.push(message.domain);
     	delete domainTimeDict[message.domain];
-    	console.log(message.domain + " blocked");
     	sendResponse({status: "complete"});
     }
 
     //Send the toggled settings
     if (message.request === "getSettings"){
-    	sendResponse({shortTime: shortTime});
+    	sendResponse({
+    		shortTime: shortTime,
+    		blockedDomains: blockedDomains
+    	});
     }
 
     //Toggle time setting
@@ -125,13 +129,25 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     	shortTime = !shortTime;
     	sendResponse({status: "complete"});
     }
+
+    //Unblock a domain
+    if (message.request === "unblock"){
+    	let i = blockedDomains.length;
+    	while (i--) {
+    		if (blockedDomains[i] == message.domain){
+    			blockedDomains.splice(i,1);
+    		}
+    	}
+    	sendResponse({status: "complete"});
+    	console.log("unblock complete");
+    }
 });
 
 function addToDict(newUrl) {
 	//Check if the new domain is blocked
 	//Check if user has gone to a new domain and not just a new url within the same domain
 	if (currentDomain != newUrl.hostname && currentDomain != null) {
-		if (!domainsBlocked.includes(currentDomain)){
+		if (!blockedDomains.includes(currentDomain)){
 			//Check if old domain has been visited before
 			if (currentDomain in domainTimeDict) {
 				domainTimeDict[currentDomain] = Date.now() - currentTimer + domainTimeDict[currentDomain];
@@ -140,7 +156,7 @@ function addToDict(newUrl) {
 				domainTimeDict[currentDomain] = Date.now() - currentTimer;
 			}
 		}
-		if (domainsBlocked.includes(newUrl.hostname)){
+		if (blockedDomains.includes(newUrl.hostname)){
 			currentDomain = newUrl.hostname;
 			currentTimer = null;
 		}

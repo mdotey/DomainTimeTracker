@@ -11,15 +11,13 @@ class ParentComponent extends React.Component {
 	}
 
 	handleDomainClick() {
-		console.log("here3");
+		
 		chrome.tabs.query({url: chrome.runtime.getURL("domainList.html")}, function(tabs) {
 		    if (tabs.length) {
-		    	console.log("here");
 		        chrome.tabs.update(tabs[0].id, {active: true});
 		        chrome.tabs.reload();
 		    } 
 		    else {
-		    	console.log("here2");
 		        chrome.tabs.create({url: chrome.runtime.getURL("domainList.html")});
 		    }
 		});
@@ -30,6 +28,7 @@ class ParentComponent extends React.Component {
 		chrome.tabs.query({url: chrome.runtime.getURL("options.html")}, function(tabs) {
 		    if (tabs.length) {
 		        chrome.tabs.update(tabs[0].id, {active: true});
+		        chrome.tabs.reload();
 		    } 
 		    else {
 		        chrome.tabs.create({url: chrome.runtime.getURL("options.html")});
@@ -38,7 +37,6 @@ class ParentComponent extends React.Component {
 	}
 
 	render() {
-		console.log("status " + this.props.status);
 		if (this.props.status === "unblocked") {
 			return (
 				<div id="outerWrapper">

@@ -15,7 +15,8 @@
 5. Click **LOAD UNPACKED** near the top:
 ![extension load](https://user-images.githubusercontent.com/6424086/40699651-6996a28a-638a-11e8-9459-6e8bf4e05389.png)
 
-6. Go to the location you unzipped the downloaded folder and select the **Build** folder.
+6. Go to the location you unzipped the downloaded folder and select the **Build** folder 
+   inside the master folder.
 
 
 ## Known Bugs

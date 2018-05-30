@@ -16,3 +16,9 @@
 ![extension load](https://user-images.githubusercontent.com/6424086/40699651-6996a28a-638a-11e8-9459-6e8bf4e05389.png)
 
 6. Go to the location you unzipped the downloaded folder and select the **Build** folder.
+
+
+##Known Bugs
+- Clicking away from the Chrome window onto another non Chrome window will cause the last 
+  visited domain to keep tracking time. The issue may be related to a known Chrome bug 
+  involving chrome.windows.onFucusChanged event listener

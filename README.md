@@ -3,9 +3,9 @@
 
 ## To install:
 
-1. Download this repo
+1. Download this repo.
 
-2. Unzip the downloaded folder
+2. Unzip the downloaded folder.
 
 3. In the chrome browser go to **More tools** and then **Extensions**.
 
@@ -15,13 +15,14 @@
 5. Click **LOAD UNPACKED** near the top:
 ![extension load](https://user-images.githubusercontent.com/6424086/40699651-6996a28a-638a-11e8-9459-6e8bf4e05389.png)
 
-6. Go to the location you unzipped the downloaded folder and select the **Build** folder.
+6. Go to the location you unzipped the downloaded folder and select the **Build** folder 
+   inside the master folder.
 
 
 ## Known Bugs
 - Clicking away from the Chrome window onto another non Chrome window will cause the last 
   visited domain to keep tracking time. The issue may be related to a known Chrome bug 
-  involving chrome.windows.onFucusChanged event listener
+  involving chrome.windows.onFocusChanged event listener.
   
 - This extension as of now does not save your times between Chrome sessions. This 
   functionality may be added in the future.

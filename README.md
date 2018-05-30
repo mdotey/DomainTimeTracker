@@ -24,7 +24,6 @@ The extension's popup window will tell you your total time on the domain you are
 ![timer popup](https://user-images.githubusercontent.com/6424086/40738534-b4f9925a-63f8-11e8-964f-78f23edc1fdf.png)
 
 The domain listing's page shows you all the domains you have visited and for how long.
-
 You can clear a timer, stop a timer, or resume a timer on this page as well as in the settings.
 
 ![domain list](https://user-images.githubusercontent.com/6424086/40738537-b60b8306-63f8-11e8-80f9-6052d73e0341.png)

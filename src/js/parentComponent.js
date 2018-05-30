@@ -54,7 +54,7 @@ class ParentComponent extends React.Component {
 			)
 		}
 
-		//domain timer is stopped
+		//Domain timer is stopped
 		else {
 			return (
 				<div>

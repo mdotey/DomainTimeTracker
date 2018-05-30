@@ -71,6 +71,7 @@ class DomainListComponent extends React.Component {
 			console.log(response.status);	
 		});
 
+		//Remove from stopped array
 		let index = this.state.stopped.indexOf(domain);
     	this.setState(function(prevState){
     		return { stopped: prevState.stopped.filter(function(val, i) {
@@ -89,7 +90,7 @@ class DomainListComponent extends React.Component {
 	   					if (!this.state.stopped.includes(key)) {
 		    				return (
 			    				<div className="list-group">
-			    				{	//Check if domain has been deleted
+			    				{	//Check if domain has been removed
 			    					(this.state.removed.includes(key) == false) &&
 			    					<div> 							
 			    						<div key={key} className="list-header">{key}</div> 
@@ -105,7 +106,7 @@ class DomainListComponent extends React.Component {
 		  				else {
 		  					return (
 			    				<div className="list-group">
-			    				{	//Check if domain has been deleted
+			    				{	//Check if domain has been removed
 			    					(this.state.removed.includes(key) == false) &&
 			    					<div> 							
 			    						<div key={key} className="list-header">{key}</div> 
@@ -130,7 +131,7 @@ class DomainListComponent extends React.Component {
 };
 
 
-
+//Render the above Domain List Component
 chrome.runtime.sendMessage({request: "getDomainList"}, function(response) {
 	const domainList = response.domainList;
 	const isShortTime = response.shortTime;

@@ -5,7 +5,7 @@ import { render } from "react-dom";
 
 const console = chrome.extension.getBackgroundPage().console;
 
-//Get starting time for current domain and render the extension popup
+//Get info for current domain and render the extension popup
 chrome.runtime.sendMessage({request: "getTotalTime"}, function(response) {
     const totalTime = response.totalTime;
     const url = response.domain;

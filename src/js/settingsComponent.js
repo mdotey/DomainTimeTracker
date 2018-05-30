@@ -48,7 +48,9 @@ class SettingsComponent extends React.Component {
 							<div className="stopped-group">
 							{	(this.state.resumedDomains.includes(stoppedDomain) == false) && 
 									<div className="stopped-domain">
-										<button className="resume-button" onClick={this.handleResumeClick.bind(this, stoppedDomain)}>Resume</button>
+										<button className="resume-button" 
+											    onClick={this.handleResumeClick.bind(this, stoppedDomain)}>
+											    Resume</button>
 										{stoppedDomain}	
 									</div>
 							}	

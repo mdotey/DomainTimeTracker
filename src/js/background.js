@@ -15,7 +15,7 @@ chrome.tabs.query({'active' : true, 'currentWindow': true}, function(tabs){
 	let newUrl = new URL(tabs[0].url);
 	currentTimer = Date.now();
 	if(newUrl.hostname == chrome.runtime.id){
-		currentDomain = "Domain Time Keeper";
+		currentDomain = "Domain Time Tracker";
 	}
 	else {
 		currentDomain = newUrl.hostname;
@@ -35,6 +35,9 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 	chrome.tabs.query({'active' : true, 'currentWindow': true}, function(tabs){
 		let newUrl = new URL(tabs[0].url);
 		addToDict(newUrl);
+		if (currentDomain == "Domain Time Tracker"){
+			chrome.tabs.reload();
+		}
 	});
 });
 
@@ -116,7 +119,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 });
 
 function addToDict(newUrl) {
-	//Check if the new domain is stopped
 	//Check if user has gone to a new domain and not just a new url within the same domain
 	if (currentDomain != newUrl.hostname && currentDomain != null) {
 		if (!stoppedDomains.includes(currentDomain)){
@@ -136,7 +138,7 @@ function addToDict(newUrl) {
 			//update current time and domain
 			currentTimer = Date.now();
 			if(newUrl.hostname == chrome.runtime.id){
-				currentDomain = "Domain Time Keeper";
+				currentDomain = "Domain Time Tracker";
 			}
 			else {
 				currentDomain = newUrl.hostname;
@@ -144,32 +146,3 @@ function addToDict(newUrl) {
 		}	
 	}
 }
-
-/*
-//Needs to be fixed, possibly due to known chrome bug
-
-//Detect when clicking on a different window and pause the timer
-chrome.windows.onFocusChanged.addListener(function(windowId){
-	if (windowId == chrome.windows.WINDOW_ID_NONE){	
-			//Check if old domain has been visited before
-			if (!stoppedDomains.includes(currentDomain)){	
-				if (currentDomain in domainTimeDict) {
-					domainTimeDict[currentDomain] = Date.now() - currentTimer + domainTimeDict[currentDomain];
-				}
-				else {
-					domainTimeDict[currentDomain] = Date.now() - currentTimer;
-				}
-				//update current time and domain
-				//currentTimer = null;
-				//currentDomain = null;
-			}	
-	}
-	else{
-		chrome.tabs.query({'active' : true, 'currentWindow': true}, function(tabs){
-			let newUrl = new URL(tabs[0].url);
-			addToDict(newUrl);
-		});
-	}
-});
-
-*/

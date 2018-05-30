@@ -9,10 +9,10 @@ class SettingsComponent extends React.Component {
 	constructor(props){
 		super(props);
 		this.handleTimeChange = this.handleTimeChange.bind(this);
-		this.handleUnblockClick = this.handleUnblockClick.bind(this);
+		this.handlResumeClick = this.handleResumeClick.bind(this);
 		this.state = {
 			shortTimeChecked: !this.props.shortTimeChecked,
-			unblockedDomains: []
+			resumedDomains: []
 		};
 	}
 
@@ -23,16 +23,14 @@ class SettingsComponent extends React.Component {
 		this.setState({shortTimeChecked: !this.state.shortTimeChecked})
 	}
 
-	handleUnblockClick(domain){
-		chrome.runtime.sendMessage({request: "unblock", domain: domain}, function(response){
+	handleResumeClick(domain){
+		chrome.runtime.sendMessage({request: "resumeDomain", domain: domain}, function(response){
 			console.log(response.status);	
 		});
-		this.setState({unblockedDomains: [...this.state.unblockedDomains, domain]});
-		console.log("settings state change " + this.state.unblockedDomains);
+		this.setState({resumedDomains: [...this.state.resumedDomains, domain]});
 	}
 
 	render(){
-		console.log("rendering settings");
 		return(
 			<div>
 				<label className="change-time">
@@ -42,16 +40,16 @@ class SettingsComponent extends React.Component {
 						onChange={this.handleTimeChange}/>
 					Change H, M, S to Hours, Minutes, Seconds
 				</label>
-				<div className="blocked-text">	
-					Blocked domains:
+				<div className="stopped-text">	
+					Stopped domains:
 					{
-						this.props.blockedDomains.map( (blockedDomain) => {
+						this.props.stoppedDomains.map( (stoppedDomain) => {
 							return (
-							<div className="blocked-group">
-							{	(this.state.unblockedDomains.includes(blockedDomain) == false) && 
-									<div className="blocked-domain">
-										{blockedDomain}
-										<button className="block-button" onClick={this.handleUnblockClick.bind(this, blockedDomain)}>Unblock</button>
+							<div className="stopped-group">
+							{	(this.state.resumedDomains.includes(stoppedDomain) == false) && 
+									<div className="stopped-domain">
+										<button className="resume-button" onClick={this.handleResumeClick.bind(this, stoppedDomain)}>Resume</button>
+										{stoppedDomain}	
 									</div>
 							}	
 							</div>
@@ -65,11 +63,11 @@ class SettingsComponent extends React.Component {
 
 chrome.runtime.sendMessage({request: "getSettings"}, function(response){
 	const isShortTimeChecked = !response.shortTime;
-	const blockedDomains = response.blockedDomains;
+	const stoppedDomains = response.stoppedDomains;
 	render(
 		<SettingsComponent 
 			shortTimeChecked = {isShortTimeChecked}
-			blockedDomains = {blockedDomains}/>,
+			stoppedDomains = {stoppedDomains}/>,
 		window.document.getElementById("settings-container")
 	);
 });

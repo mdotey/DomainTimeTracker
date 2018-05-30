@@ -8,9 +8,9 @@ class TimerComponent extends React.Component {
   constructor(props){
   	super(props);
     this.state = {
-      hours: 0, 
-      minutes: 0, 
-      seconds:0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
       startTime: Date.now()
     };
   	this.calcTimer = this.calcTimer.bind(this);
@@ -61,20 +61,35 @@ class TimerComponent extends React.Component {
 
   /*Calculate the timer every second when the popup is open*/
   componentDidMount() {
-  	this.interval = setInterval(() => this.calcTimer(), 1000);
+    if (this.props.status == "not stopped") {
+  	  this.interval = setInterval(() => this.calcTimer(), 1000);
+    }
   }
 
   componentWillUnmount(){
-  	clearInterval(this.interval);
+    if (this.props.status == "not stopped") {
+  	  clearInterval(this.interval);
+    }
   }
 
   render () {
-    return (
+    if (this.props.status === "not stopped"){
+      return (
+          <div>
+            <div className="popup-header">{this.props.domain}</div>  
+            {this.renderHelper()}
+          </div>
+      )
+    }
+    else {
+      return (
         <div>
-          <div className="popup-header">{this.props.domain}</div>  
+          <div className="stopped-popup">{this.props.domain} is stopped!</div>  
+          {this.calcTimer()}
           {this.renderHelper()}
         </div>
-    )
+      )
+    }
   }
 };
 

@@ -8,8 +8,9 @@
   background-color: gainsboro;
 }
 
-.blocked-popup {
-  font-size: 24px;
+.stopped-popup {
+  color: red;
+  font-size: 20px;
   font-weight: 730;
 }
 
@@ -47,6 +48,18 @@
 	background: linear-gradient(silver, gainsboro, gainsboro)
 }
 
+.list-timer {
+  display: inline-block;
+}
+
+.stopped {
+  color: red;
+  display: inline-block;
+  font-weight: 'bold';
+  font-size: 22px;
+  margin-left: 10px;
+}
+
 .change-time{
 	font-size: 16px;
 }
@@ -57,20 +70,20 @@
   height: 95vh;
 }
 
-.blocked-text{
+.stopped-text{
   font-size: 20px;
   font-weight: 'bold';
   margin-top: 20px;
 }
 
-.blocked-domain {
+.stopped-domain {
   font-size: 16px;
 }
 
-.blocked-group {
+.stopped-group {
   margin-left: 20px;
 }
 
-.block-button {
-  margin-left: 5px;
+.resume-button {
+  margin-right: 8px;
 }

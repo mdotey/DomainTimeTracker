@@ -1,7 +1,7 @@
 {
-  "name": "Timer",
-  "version": "0.0.1",
-  "description": "Time your web activity",
+  "name": "Domain Time Tracker",
+  "version": "1.0.0",
+  "description": "Keeps track of your time on each domain.",
   "scripts": {
     "build": "node utils/build.js",
     "start": "node utils/webserver.js"

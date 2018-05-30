@@ -1,7 +1,7 @@
-#Domain Time Tracker
-###A Chrome extension that keeps track of your time on each domain.
+# Domain Time Tracker
+### A Chrome extension that keeps track of your time on each domain.
 
-##To install:
+## To install:
 
 1. Download this repo
 
@@ -18,7 +18,10 @@
 6. Go to the location you unzipped the downloaded folder and select the **Build** folder.
 
 
-##Known Bugs
+## Known Bugs
 - Clicking away from the Chrome window onto another non Chrome window will cause the last 
   visited domain to keep tracking time. The issue may be related to a known Chrome bug 
   involving chrome.windows.onFucusChanged event listener
+  
+- This extension as of now does not save your times between Chrome sessions. This 
+  functionality may be added in the future.

@@ -35,18 +35,16 @@ class ParentComponent extends React.Component {
 	}
 
 	render() {
-		if (this.props.status === "not stopped") {
+		if (this.props.status === "not paused") {
 			return (
-				<div id="outerWrapper">
-					<div id="TimerComponent">
-						<Timer 
-							totalTime = {this.props.totalTime} 
-							domain = {this.props.domain}
-							isShortTime = {this.props.isShortTime}
-							status = {this.props.status}
-						/>
-					</div>
-					<div id="buttons">
+				<div className="outer-wrapper">
+					<Timer 
+						totalTime = {this.props.totalTime} 
+						domain = {this.props.domain}
+						isShortTime = {this.props.isShortTime}
+						status = {this.props.status}
+					/>
+					<div id="buttons" className="popup-buttons">
 	          			<button id="domainButton" onClick={this.handleDomainClick}>Show Domain List</button>
 	          			<button id="settingsButton" onClick={this.handleSettingsClick}>Settings</button>
 	          		</div>
@@ -54,10 +52,10 @@ class ParentComponent extends React.Component {
 			)
 		}
 
-		//Domain timer is stopped
+		//Domain timer is paused
 		else {
 			return (
-				<div>
+				<div className="outer-wrapper">
 					<div>
 			            <Timer 
 							totalTime = {this.props.totalTime} 
@@ -66,7 +64,7 @@ class ParentComponent extends React.Component {
 							status = {this.props.status}
 						/>
           			</div>
-					<div id="buttons">
+					<div id="buttons" className="popup-buttons">
 	          			<button id="domainButton" onClick={this.handleDomainClick}>Show Domain List</button>
 	          			<button id="settingsButton" onClick={this.handleSettingsClick}>Settings</button>
 	          		</div>

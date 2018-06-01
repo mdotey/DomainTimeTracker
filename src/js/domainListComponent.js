@@ -10,10 +10,10 @@ class DomainListComponent extends React.Component {
 		super(props);
 		this.state = {
 			removed: [], 
-			stopped: this.props.stopped
+			paused: this.props.paused
 		};
-		this.handleResetClick = this.handleResetClick.bind(this);
-		this.handleStopClick = this.handleStopClick.bind(this);
+		this.handleClearClick = this.handleClearClick.bind(this);
+		this.handlepauseClick = this.handlepauseClick.bind(this);
 		this.handleStartClick = this.handleStartClick.bind(this);
 		this.calcTimer = this.calcTimer.bind(this);
 	}
@@ -30,40 +30,44 @@ class DomainListComponent extends React.Component {
 
 	  	if (this.props.isShortTime){
 	  		return ( 
-	  			<div>
-		            <div className="digit">{hours}</div>
-		            <div className="word">H</div>
-		            <div className="digit">{minutes}</div>
-		            <div className="word">M</div> 
-		            <div className="digit">{seconds}</div> 
-		            <div className="word">S</div>
-          		</div>)
+	  			<div className="clock-parent">
+		  			<div className="clock-wrapper">
+			            <div className="digit">{hours}</div>
+			            <div className="colon">:</div>
+			            <div className="digit">{minutes}</div>
+			            <div className="colon">:</div> 
+			            <div className="digit">{seconds}</div> 
+	          		</div>
+          		</div>
+          		)
 	  	} 
 	  	else {
 	    	return (
-	    		 <div>
-		            <div className="digit">{hours}</div>
-		            <div className="word">hours</div>
-		            <div className="digit">{minutes}</div>
-		            <div className="word">minutes</div> 
-		            <div className="digit">{seconds}</div> 
-            		<div className="word">seconds</div>
+	    		<div className="clock-parent">
+		    		<div className="clock-wrapper">
+			            <div className="digit">{hours}</div>
+			            <div className="word">H</div>
+			            <div className="digit">{minutes}</div>
+			            <div className="word">M</div> 
+			            <div className="digit">{seconds}</div> 
+	            		<div className="word">S</div>
+	          		</div>
           		</div>)
 	  	}
 	  }
 
-	handleResetClick(domain) {
-		chrome.runtime.sendMessage({request: "resetDomain", domain: domain}, function(response){
+	handleClearClick(domain) {
+		chrome.runtime.sendMessage({request: "ClearDomain", domain: domain}, function(response){
 			console.log(response.status);	
 		});
 		this.setState({removed: [...this.state.removed, domain]});
 	}
 
-	handleStopClick(domain) {
-		chrome.runtime.sendMessage({request: "stopDomain", domain: domain}, function(response){
+	handlepauseClick(domain) {
+		chrome.runtime.sendMessage({request: "pauseDomain", domain: domain}, function(response){
 			console.log(response.status);	
 		});
-		this.setState({stopped: [...this.state.stopped, domain]});
+		this.setState({paused: [...this.state.paused, domain]});
 	}
 
 	handleStartClick(domain) {
@@ -71,10 +75,10 @@ class DomainListComponent extends React.Component {
 			console.log(response.status);	
 		});
 
-		//Remove from stopped array
-		let index = this.state.stopped.indexOf(domain);
+		//Remove from paused array
+		let index = this.state.paused.indexOf(domain);
     	this.setState(function(prevState){
-    		return { stopped: prevState.stopped.filter(function(val, i) {
+    		return { paused: prevState.paused.filter(function(val, i) {
       			return i !== index;
     		})};
 		});
@@ -86,8 +90,8 @@ class DomainListComponent extends React.Component {
 	    		<div>
 	      		{
 	   				Object.entries(domains).map( ([key, value]) => {
-	   					//check if the domain is currently stopped
-	   					if (!this.state.stopped.includes(key)) {
+	   					//check if the domain is currently paused
+	   					if (!this.state.paused.includes(key)) {
 		    				return (
 			    				<div className="list-group">
 			    				{	//Check if domain has been removed
@@ -95,8 +99,10 @@ class DomainListComponent extends React.Component {
 			    					<div> 							
 			    						<div key={key} className="list-header">{key}</div> 
 			    						{this.calcTimer(value)}
-			    						<button id={key + "remove"} onClick={this.handleResetClick.bind(this, key)}>Clear</button>
-			    						<button id={key + "stop"} onClick={this.handleStopClick.bind(this, key)}>Stop</button>
+			    						<div className="list-buttons">
+				    						<button id={key + "remove"} onClick={this.handleClearClick.bind(this, key)}>Clear</button>
+				    						<button id={key + "pause"} onClick={this.handlepauseClick.bind(this, key)}>Pause</button>
+				    					</div>
 			  						</div>	  								
 			  					}	  							
 			  					</div>
@@ -109,12 +115,12 @@ class DomainListComponent extends React.Component {
 			    				{	//Check if domain has been removed
 			    					(this.state.removed.includes(key) == false) &&
 			    					<div> 							
-			    						<div key={key} className="list-header">{key}</div> 
-			    						<div className="list-timer">{this.calcTimer(value)}</div>
-			    						<div className="stopped">Stopped!</div>
+			    						<div key={key} className="list-header">{key}</div>
+			    						<div className="paused-listing">Paused!</div> 
+			    						{this.calcTimer(value)}			    						
 			    						<div className="list-buttons">
-				    						<button id={key + "remove"} onClick={this.handleResetClick.bind(this, key)}>Clear</button>
-				    						<button id={key + "start"} onClick={this.handleStartClick.bind(this, key)}>Start</button>
+				    						<button id={key + "remove"} onClick={this.handleClearClick.bind(this, key)}>Clear</button>
+				    						<button id={key + "start"} onClick={this.handleStartClick.bind(this, key)}>Resume</button>
 				    					</div>
 			  						</div>	  								
 			  					}	  							
@@ -135,12 +141,12 @@ class DomainListComponent extends React.Component {
 chrome.runtime.sendMessage({request: "getDomainList"}, function(response) {
 	const domainList = response.domainList;
 	const isShortTime = response.shortTime;
-	const stoppedDomains = response.stopped;
+	const pausedDomains = response.paused;
 	render(
 		<DomainListComponent 
 			domains = {domainList} 
 			isShortTime = {isShortTime} 
-			stopped = {stoppedDomains}/>,
+			paused = {pausedDomains}/>,
 	    window.document.getElementById("domain-container")
 	);
 });

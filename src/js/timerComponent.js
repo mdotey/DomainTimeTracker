@@ -33,25 +33,28 @@ class TimerComponent extends React.Component {
   renderHelper() {
     if (this.props.isShortTime) {
       return(
-        <div>
-            <div className="digit">{this.state.hours}</div>
-            <div className="word">H</div>
-            <div className="digit">{this.state.minutes}</div>
-            <div className="word">M</div> 
-            <div className="digit">{this.state.seconds}</div> 
-            <div className="word">S</div>
-          </div>
+        <div className="clock-parent">
+          <div className="clock-wrapper">
+              <div className="digit" type="text/css">{this.state.hours}</div>
+              <div className="colon">:</div>
+              <div className="digit" type="text/css">{this.state.minutes}</div>
+              <div className="colon">:</div> 
+              <div className="digit">{this.state.seconds}</div> 
+            </div>
+        </div>
       )
     }
     else {
       return(
-        <div>
-          <div className="digit">{this.state.hours}</div>
-          <div className="word">hours</div>
-          <div className="digit">{this.state.minutes}</div>
-          <div className="word">minutes</div> 
-          <div className="digit">{this.state.seconds}</div> 
-          <div className="word">seconds</div>
+        <div className="clock-parent">
+          <div className="clock-wrapper">
+            <div className="digit" type="text/css">{this.state.hours}</div>
+            <div className="word">H</div>
+            <div className="digit" type="text/css">{this.state.minutes}</div>
+            <div className="word">M</div> 
+            <div className="digit" type="text/css">{this.state.seconds}</div> 
+            <div className="word">S</div>
+          </div>
         </div>
       )
     }
@@ -61,21 +64,21 @@ class TimerComponent extends React.Component {
 
   /*Calculate the timer every second when the popup is open*/
   componentDidMount() {
-    if (this.props.status == "not stopped") {
+    if (this.props.status == "not paused") {
   	  this.interval = setInterval(() => this.calcTimer(), 1000);
     }
   }
 
   componentWillUnmount(){
-    if (this.props.status == "not stopped") {
+    if (this.props.status == "not paused") {
   	  clearInterval(this.interval);
     }
   }
 
   render () {
-    if (this.props.status === "not stopped"){
+    if (this.props.status === "not paused"){
       return (
-          <div>
+          <div className="popup-wrapper">
             <div className="popup-header">{this.props.domain}</div>  
             {this.renderHelper()}
           </div>
@@ -83,8 +86,9 @@ class TimerComponent extends React.Component {
     }
     else {
       return (
-        <div>
-          <div className="stopped-popup">{this.props.domain} is stopped!</div>  
+        <div className="popup-wrapper">
+          <div className="popup-header">{this.props.domain}</div>
+          <div className="paused-popup">Paused</div>  
           {this.calcTimer()}
           {this.renderHelper()}
         </div>

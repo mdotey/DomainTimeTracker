@@ -6,8 +6,8 @@ var console = chrome.extension.getBackgroundPage().console;
 let domainTimeDict = {};
 let currentDomain;
 let currentTimer;
-let shortTime = true;
-let stoppedDomains = [];
+let shortTime = false;
+let pausedDomains = [];
 const url = require('url');
 
 //Set timer on startup
@@ -46,12 +46,12 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	//Send the total time of a domain
     if (message.request === "getTotalTime") {
     		
-    	if (stoppedDomains.includes(currentDomain)){
+    	if (pausedDomains.includes(currentDomain)){
     		sendResponse({
     			totalTime: domainTimeDict[currentDomain],
 				domain: currentDomain,
 				shortTime: shortTime,
-    			status: "stopped"});
+    			status: "paused"});
     	}
     	else {
     		let totalTime;
@@ -66,7 +66,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 				totalTime: totalTime,
 				domain: currentDomain,
 				shortTime: shortTime,
-				status: "not stopped"
+				status: "not paused"
 			});
 		}        
     }
@@ -76,27 +76,27 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     	sendResponse({
     		domainList: domainTimeDict, 
     		shortTime: shortTime,
-    		stopped: stoppedDomains
+    		paused: pausedDomains
     	});
     }
 
-    //Reset a domain in the dictionary
-    if (message.request === "resetDomain") {
+    //Clear a domain in the dictionary
+    if (message.request === "ClearDomain") {
     	delete domainTimeDict[message.domain];
-    	sendResponse({status: "Reset " + message.domain + " complete"});
+    	sendResponse({status: "Clear " + message.domain + " complete"});
     }
 
-    //Stop a domain from being recorded
-    if (message.request === "stopDomain") {
-    	stoppedDomains.push(message.domain);
-    	sendResponse({status: "Stop " + message.domain + " complete"});
+    //pause a domain from being recorded
+    if (message.request === "pauseDomain") {
+    	pausedDomains.push(message.domain);
+    	sendResponse({status: "pause " + message.domain + " complete"});
     }
 
     //Send the toggled settings
     if (message.request === "getSettings"){
     	sendResponse({
     		shortTime: shortTime,
-    		stoppedDomains: stoppedDomains
+    		pausedDomains: pausedDomains
     	});
     }
 
@@ -108,10 +108,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
     //Resume tracking a domain
     if (message.request === "resumeDomain"){
-    	let i = stoppedDomains.length;
+    	let i = pausedDomains.length;
     	while (i--) {
-    		if (stoppedDomains[i] == message.domain){
-    			stoppedDomains.splice(i,1);
+    		if (pausedDomains[i] == message.domain){
+    			pausedDomains.splice(i,1);
     		}
     	}
     	sendResponse({status: "Resume " + message.domain + " complete"});
@@ -121,7 +121,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 function addToDict(newUrl) {
 	//Check if user has gone to a new domain and not just a new url within the same domain
 	if (currentDomain != newUrl.hostname && currentDomain != null) {
-		if (!stoppedDomains.includes(currentDomain)){
+		if (!pausedDomains.includes(currentDomain)){
 			//Check if old domain has been visited before
 			if (currentDomain in domainTimeDict) {
 				domainTimeDict[currentDomain] = Date.now() - currentTimer + domainTimeDict[currentDomain];
@@ -130,7 +130,7 @@ function addToDict(newUrl) {
 				domainTimeDict[currentDomain] = Date.now() - currentTimer;
 			}
 		}
-		if (stoppedDomains.includes(newUrl.hostname)){
+		if (pausedDomains.includes(newUrl.hostname)){
 			currentDomain = newUrl.hostname;
 			currentTimer = null;
 		}

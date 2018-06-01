@@ -38,24 +38,25 @@ class SettingsComponent extends React.Component {
 						type="checkbox" 
 						checked={!this.state.shortTimeChecked} 
 						onChange={this.handleTimeChange}/>
-					Change H, M, S to Hours, Minutes, Seconds
+					Change the colons to H, M, S
 				</label>
-				<div className="stopped-text">	
-					Stopped domains:
+				<div className="paused-text">	
+					Paused domains:
 					{
-						this.props.stoppedDomains.map( (stoppedDomain) => {
+						this.props.pausedDomains.map( (pausedDomain) => {
 							return (
-							<div className="stopped-group">
-							{	(this.state.resumedDomains.includes(stoppedDomain) == false) && 
-									<div className="stopped-domain">
-										<button className="resume-button" 
-											    onClick={this.handleResumeClick.bind(this, stoppedDomain)}>
-											    Resume</button>
-										{stoppedDomain}	
-									</div>
-							}	
-							</div>
-						)}) 
+								<div className="paused-group">
+								{	(this.state.resumedDomains.includes(pausedDomain) == false) && 
+										<div className="paused-domain">
+											<button className="resume-button" 
+												    onClick={this.handleResumeClick.bind(this, pausedDomain)}>
+												    Resume</button>
+											{pausedDomain}	
+										</div>
+								}	
+								</div>
+							)
+						}) 
 					}
 				</div>
 			</div>
@@ -65,11 +66,11 @@ class SettingsComponent extends React.Component {
 
 chrome.runtime.sendMessage({request: "getSettings"}, function(response){
 	const isShortTimeChecked = !response.shortTime;
-	const stoppedDomains = response.stoppedDomains;
+	const pausedDomains = response.pausedDomains;
 	render(
 		<SettingsComponent 
 			shortTimeChecked = {isShortTimeChecked}
-			stoppedDomains = {stoppedDomains}/>,
+			pausedDomains = {pausedDomains}/>,
 		window.document.getElementById("settings-container")
 	);
 });

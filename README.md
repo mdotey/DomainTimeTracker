@@ -1,5 +1,5 @@
 # Domain Time Tracker
-### A Chrome extension that keeps track of your time on each domain written in ReactJS and Javascript.
+### A Chrome extension that keeps track of your time on each domain written in ReactJS and Javascript ES6.
 
 ## To install:
 

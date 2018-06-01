@@ -1,5 +1,5 @@
 # Domain Time Tracker
-### A Chrome extension that keeps track of your time on each domain.
+### A Chrome extension that keeps track of your time on each domain written in ReactJS and Javascript.
 
 ## To install:
 
@@ -18,10 +18,19 @@
 6. Go to the location you unzipped the downloaded folder and select the **Build** folder 
    inside the master folder.
 
+## Features:
 
-## Known Bugs
-- Clicking away from the Chrome window onto another non Chrome window will cause the last 
-  visited domain to keep tracking time. The issue may be related to a known Chrome bug 
+The extension's popup window will tell you your total time on the domain you are currently on:
+![timer popup](https://user-images.githubusercontent.com/6424086/40738534-b4f9925a-63f8-11e8-964f-78f23edc1fdf.png)
+
+The domain listing's page shows you all the domains you have visited and for how long.
+You can clear a timer, stop a timer, or resume a timer on this page as well as in the settings.
+
+![domain list](https://user-images.githubusercontent.com/6424086/40738537-b60b8306-63f8-11e8-80f9-6052d73e0341.png)
+
+## Known Bugs:
+- Clicking away from the Chrome window onto another non Chrome window will cause the last
+  visited domain to keep tracking time. The issue may be related to a known Chrome bug
   involving chrome.windows.onFocusChanged event listener.
   
 - This extension as of now does not save your times between Chrome sessions. This 
